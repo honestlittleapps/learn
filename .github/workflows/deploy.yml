@@ -19,6 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: mkdir _site && tar -xzf site.tar.gz -C _site
+      - name: Generate free audio library
+        run: |
+          if [ -f _site/sounds/build.sh ]; then
+            command -v ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+            bash _site/sounds/build.sh
+            ls -la _site/sounds/audio
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
